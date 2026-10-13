@@ -7,7 +7,7 @@ import java.util.List;
 public class JDBCUtils {
 
 
-    //TODO Nidhi homework -> why we need static
+
     public static Connection connection;
     public static Statement statement;
     public static PreparedStatement prs;
