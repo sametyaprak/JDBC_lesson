@@ -126,7 +126,31 @@ public class LivePracticeTest {
         Then  Verify that both counts are equal
         And   User closes both connections
      */
+        @Test
+        public void productCountConsistencyTest() throws SQLException {
+            JDBCUtils.connectToDatabase(HOST, PORT, DATABASE, USER, PASSWORD);
+            // Count products in Snack Attack database
+            PreparedStatement prsSnack = JDBCUtils.connection.prepareStatement("SELECT count(*) FROM product");
+            ResultSet rsSnack = prsSnack.executeQuery();
+            rsSnack.next();
+            int snackCount = rsSnack.getInt(1);
+            System.out.println("Product count in Snack Attack DB: " + snackCount);
 
+            // Connect to practice database
+            day1.JDBCUtils.connectToDatabase();
+            PreparedStatement prsPractice = JDBCUtils.connection.prepareStatement("SELECT count(*) FROM product");
+            ResultSet rsPractice = prsPractice.executeQuery();
+            rsPractice.next();
+            int practiceCount = rsPractice.getInt(1);
+            System.out.println("Product count in Practice DB: " + practiceCount);
+
+            // Verify counts are equal
+            Assertions.assertEquals(snackCount, practiceCount, "Product counts should be equal in both databases");
+
+            // Close practice database connection
+            JDBCUtils.closeStatementAndConnection();
+            //TODO do we have any open DB connection at the end ?
+        }
 
 
 
